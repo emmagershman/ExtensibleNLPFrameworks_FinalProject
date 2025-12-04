@@ -21,14 +21,14 @@ class TEXT:
         """ Return number of words in text"""
         pass
 
-    def your_second_visualization(self, **misc_parameters):
+    def second_visualization(self, **misc_parameters): #change name later
         """
         Create a multi-subplot visualization (one subplot per text).
         """
         pass
 
 
-    def your_third_visualization(self, **misc_parameters):
+    def third_visualization(self, **misc_parameters):#change name later
         """
         Create a single visualization that overlays data from each text file.
         """
