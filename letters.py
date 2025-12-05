@@ -291,9 +291,10 @@ class Letters:
         plt.tight_layout()
         plt.show()
 
-    def third_visualization(self, **misc_parameters):#change name later
+    def Sentiment_curve(self, **misc_parameters):
         """
-        Create a single visualization that overlays data from each text file.
+        Create a single visualization that overlays data from each text file
+        compare the polarities(positivity or negativity) of different text files from beigning to end
         """
         fig = go.Figure()
         labels = list(self.data["fulltext"].keys())

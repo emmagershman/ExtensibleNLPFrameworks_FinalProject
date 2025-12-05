@@ -16,7 +16,7 @@ def main():
     letters.compare_num_words()
     letters.second_visualization()
     letters.word_cloud()
-    letters.third_visualization()
+    letters.Sentiment_curve()
 
 if __name__ == '__main__':
     main()
