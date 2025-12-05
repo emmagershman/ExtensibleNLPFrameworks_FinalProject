@@ -32,6 +32,8 @@ from collections import Counter, defaultdict
 import matplotlib.pyplot as plt
 import json
 import string
+from textblob import TextBlob
+from matplotlib.ticker import PercentFormatter
 
 STOP_WORDS_FILENAME = 'stop_words.txt'
 
@@ -50,6 +52,12 @@ class Letters:
         with open(stopfile, 'r') as file:
             words = set([line.strip() for line in file])
         return words
+    # def load(self, stopfile):
+    #     with open(stopfile, 'r') as f:
+    #         for line in f:
+    #             word = line.strip()
+    #             if word:
+    #                 self.stop_word.append(word)
 
     @staticmethod
     def default_parser(filename):
@@ -58,11 +66,12 @@ class Letters:
             text = f.read()
             text = text.lower()
             text = text.translate(str.maketrans('', '', string.punctuation))
-        word_lst = text.split(" ")
-        filtered_words = [word for word in word_lst if word not in filename.load_stop_word(STOP_WORDS_FILENAME)]
+        word_lst = text.split()
+        filtered_words = [word for word in word_lst if word not in Letters.load_stop_word(STOP_WORDS_FILENAME)]
         results = {
             'wordcount': Counter(filtered_words),
-            'numwords': len(filtered_words)
+            'numwords': len(filtered_words),
+            'fulltext': filtered_words
         }
 
         print("Parsed ", filename, ": ", results)
@@ -105,8 +114,113 @@ class Letters:
         """ A very simplistic visualization that creates
         a bar chart comparing num words for each text file
         For HW7, I expect much more interesting visualizations """
-
+        plt.figure(figsize=(10, 6))
         numwords = self.data['numwords']
         for label, nw in numwords.items():
             plt.bar(label, nw)
+        plt.xlabel('Text File')
+        plt.ylabel('Number of Words')
+        plt.title('Wordcount for Letters')
+        plt.xticks(rotation=45)
+        plt.tight_layout()
         plt.show()
+
+    def second_visualization(self, **misc_parameters): #change name later
+        """
+        Create a multi-subplot visualization (one subplot per text).
+        """
+        pass
+
+
+    def third_visualization(self, **misc_parameters):#change name later
+        """
+        Create a single visualization that overlays data from each text file.
+        """
+        fig, ax = plt.subplots(figsize=(12, 8))
+        labels = list(self.data["fulltext"].keys())
+        for label in labels:
+            polarities = [TextBlob(word).sentiment.polarity for word in self.data['fulltext'][label]]
+            place = [(i/len(self.data['fulltext'][label])) * 100 for i in range(len(self.data['fulltext'][label]))]
+            ax.plot(place, polarities, label=label)
+        ax.set_xticks(range(0, 101, 10))
+        ax.xaxis.set_major_formatter(PercentFormatter(xmax=100))
+        ax.set_xlim(0, 100)
+        ax.legend()
+        plt.tight_layout()
+        plt.xlabel("Progress Through Letter (%)")
+        plt.ylabel('Sentiment Polarity')
+        plt.title('How Sentiment Changes Throughout the Letter')
+        plt.show()
+
+"""
+    def wordcount_sankey(
+        self,
+        word_list: Optional[List[str]] = None,
+        k: int = 5,
+        title: str = "Text-to-Word Sankey Diagram",
+    ) -> None:
+        
+        # Text-to-Word Sankey diagram.
+        # - If word_list is provided: use those words
+        # - Else: use the union of the k most common words for each text
+        
+
+        if "word_counts" not in self.data or not self.data["word_counts"]:
+            raise ValueError("No texts loaded. Please call load_text first.")
+
+        labels = list(self.data["word_counts"].keys())
+        word_counts = self.data["word_counts"]
+
+        # If user didn't supply a word list, build one from top-k of each text
+        if word_list is None:
+            word_set = set()
+            for label in labels:
+                counts = word_counts[label]
+                for word, _ in counts.most_common(k):
+                    word_set.add(word)
+            word_list = sorted(word_set)
+
+        # Build node list: first all text labels, then all words
+        text_nodes = labels
+        word_nodes = word_list
+
+        node_labels = text_nodes + word_nodes
+
+        # Map name -> index in node list
+        node_index = {name: i for i, name in enumerate(node_labels)}
+
+        sources = []
+        targets = []
+        values = []
+
+        # For each text and each word, add a link if count > 0
+        for text_label in text_nodes:
+            counts = word_counts[text_label]
+            for word in word_nodes:
+                c = counts.get(word, 0)
+                if c > 0:
+                    sources.append(node_index[text_label])
+                    targets.append(node_index[word])
+                    values.append(c)
+
+        fig = go.Figure(
+            data=[
+                go.Sankey(
+                    node=dict(
+                        pad=15,
+                        thickness=20,
+                        line=dict(width=0.5),
+                        label=node_labels,
+                    ),
+                    link=dict(
+                        source=sources,
+                        target=targets,
+                        value=values,
+                    ),
+                )
+            ]
+        )
+        fig.update_layout(title_text=title, font_size=10)
+        fig.show()
+"""
+
