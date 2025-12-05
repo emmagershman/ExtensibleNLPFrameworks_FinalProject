@@ -37,6 +37,7 @@ import plotly.graph_objects as go
 import pandas as pd
 import random
 import math
+from wordcloud import WordCloud
 
 STOP_WORDS_FILENAME = 'stop_words.txt'
 
@@ -170,6 +171,42 @@ class Letters:
         plt.tight_layout()
         plt.show()
 
+    def word_cloud(self, cols=3, **misc_parameters):
+        labels = list(self.data["wordcount"].keys())
+        n = len(labels)
+
+        if n == 0:
+            print("No data to visualize")
+            return
+
+        rows = math.ceil(n / cols)
+        fig, axes = plt.subplots(rows, cols, figsize=(5 * cols, 5 * rows))
+
+        if n == 1:
+            axes = [axes]
+        else:
+            axes = axes.flatten()
+
+        for i, label in enumerate(labels):
+            word_freq = self.data["wordcount"][label]
+
+            # Use a Windows system font
+            wc = WordCloud(
+                width=400,
+                height=400,
+                background_color='white',
+                font_path='C:/Windows/Fonts/arial.ttf'  # Specify Windows font
+            ).generate_from_frequencies(word_freq)
+
+            axes[i].imshow(wc, interpolation='bilinear')
+            axes[i].axis('off')
+            axes[i].set_title(label, fontsize=12)
+
+        for j in range(n, len(axes)):
+            axes[j].axis('off')
+
+        plt.tight_layout()
+        plt.show()
 
     def third_visualization(self, **misc_parameters):#change name later
         """
