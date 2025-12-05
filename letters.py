@@ -225,7 +225,7 @@ class Letters:
         cols = math.ceil(math.sqrt(num_files))
         rows = math.ceil(num_files / cols)
 
-        fig, axes = plt.subplots(rows, cols, figsize=(5 * cols, 4 * rows), sharey=True)
+        fig, axes = plt.subplots(rows, cols, figsize=(5 * cols, 4 * rows), sharey = True)
 
         if num_files == 1:
             axes = [axes]
@@ -233,10 +233,17 @@ class Letters:
             axes = axes.flatten()
 
         for i, label in enumerate(labels):
-            word_count = self.data['numwords'][label]
+            total_words = self.data['numwords'][label]
+            unique_words = len(self.data['wordcount'][label])
+
+            x_pos = [0,1]
+            values = [total_words, unique_words]
+            colors = ['#3498db', '#e74c3c']
 
             # Plot bar for each file
-            axes[i].bar(["Word Count"], [word_count])
+            axes[i].bar(x_pos, values, width = 0.5, color = colors)
+            axes[i].set_xticks(x_pos)
+            axes[i].set_xticklabels(['Total Words', 'Unique Words'], rotation = 15)
             axes[i].set_title(label)
             axes[i].set_ylabel("Count")
 
@@ -244,6 +251,7 @@ class Letters:
         for j in range(num_files, len(axes)):
             axes[j].axis('off')
 
+        plt.suptitle('Word Count Comparison: Total v. Unique')
         plt.tight_layout()
         plt.show()
 

@@ -12,6 +12,7 @@ def main():
     letters.load_text('data/MyDearestWill_03-28-1917.txt', label='My Dearest Will, March 1917')
     letters.load_text('data/DearGertie_05-06-1916.txt', label='Dear Gertie, May 1916')
     pp.pprint(letters.data)
+    letters.wordcount_sankey()
     letters.compare_num_words()
     letters.second_visualization()
     letters.word_cloud()
