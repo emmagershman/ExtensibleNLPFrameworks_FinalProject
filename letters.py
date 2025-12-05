@@ -33,7 +33,9 @@ import matplotlib.pyplot as plt
 import json
 import string
 from textblob import TextBlob
-from matplotlib.ticker import PercentFormatter
+import plotly.graph_objects as go
+import pandas as pd
+import random
 
 STOP_WORDS_FILENAME = 'stop_words.txt'
 
@@ -136,21 +138,36 @@ class Letters:
         """
         Create a single visualization that overlays data from each text file.
         """
-        fig, ax = plt.subplots(figsize=(12, 8))
+        fig = go.Figure()
         labels = list(self.data["fulltext"].keys())
+
         for label in labels:
-            polarities = [TextBlob(word).sentiment.polarity for word in self.data['fulltext'][label]]
-            place = [(i/len(self.data['fulltext'][label])) * 100 for i in range(len(self.data['fulltext'][label]))]
-            ax.plot(place, polarities, label=label)
-        ax.set_xticks(range(0, 101, 10))
-        ax.xaxis.set_major_formatter(PercentFormatter(xmax=100))
-        ax.set_xlim(0, 100)
-        ax.legend()
-        plt.tight_layout()
-        plt.xlabel("Progress Through Letter (%)")
-        plt.ylabel('Sentiment Polarity')
-        plt.title('How Sentiment Changes Throughout the Letter')
-        plt.show()
+            # Compute sentiment for each word
+            words = self.data["fulltext"][label]
+            polarities = [TextBlob(word).sentiment.polarity for word in words]
+            polarities = pd.Series(polarities).rolling(window=5, min_periods=1).mean().tolist()
+
+            # Percent position through the text
+            place = [(i / len(words)) * 100 for i in range(len(words))]
+
+            # Add line to Plotly figure
+            fig.add_trace(go.Scatter(
+                x=place,
+                y=polarities,
+                mode='lines',
+                name=label,
+            ))
+
+        # graph label
+        fig.update_layout(
+            title="Sentiment Curve Comparison",
+            xaxis_title="Progress Through Text (%)",
+            yaxis_title="Sentiment Polarity",
+            yaxis=dict(range=[-1, 1]),
+            template="plotly_white"
+        )
+
+        fig.show(renderer="browser")
 
 """
     def wordcount_sankey(
