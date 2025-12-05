@@ -31,6 +31,9 @@ URL3 = 'https://www.iwm.org.uk/history/letters-to-loved-ones'
 from collections import Counter, defaultdict
 import matplotlib.pyplot as plt
 import json
+import string
+
+STOP_WORDS_FILENAME = 'stop_words.txt'
 
 class Letters:
 
@@ -41,11 +44,22 @@ class Letters:
         self.data = defaultdict(dict)
 
     @staticmethod
+    def load_stop_word(stopfile):
+
+        """ Load stop words into a set"""
+        with open(stopfile, 'r') as file:
+            words = set([line.strip() for line in file])
+        return words
+
+    @staticmethod
     def default_parser(filename):
         """ For processing plain text files (.txt) """
         with open(filename, "r", encoding='utf-8') as f:
             text = f.read()
             text = text.lower()
+            text = text.translate(str.maketrans('', '', string.punctuation))
+        word_lst = text.split(" ")
+        filtered_words = [word for word in word_lst if word not in filename.load_stop_word(STOP_WORDS_FILENAME)]
         results = {
             'wordcount': Counter(text.split(" ")),
             'numwords': len(text.split(" "))
@@ -59,6 +73,7 @@ class Letters:
         f = open(filename)
         raw = json.load(f)
         text = raw['text']
+        text = text.translate(str.maketrans('', '', string.punctuation))
         words = text.split(" ")
         wc = Counter(words)
         num = len(words)

@@ -11,7 +11,9 @@ class TEXT:
     def load_stop_word(self, stopfile):
 
         """ Load stop words into a set"""
-        pass
+        with open(stopfile, 'r') as file:
+            words = [line.strip() for line in file]
+
 
     def load_text(self, filename, label=None, parser=None):
         """ Load text from a file"""
