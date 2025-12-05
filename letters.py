@@ -61,8 +61,8 @@ class Letters:
         word_lst = text.split(" ")
         filtered_words = [word for word in word_lst if word not in filename.load_stop_word(STOP_WORDS_FILENAME)]
         results = {
-            'wordcount': Counter(text.split(" ")),
-            'numwords': len(text.split(" "))
+            'wordcount': Counter(filtered_words),
+            'numwords': len(filtered_words)
         }
 
         print("Parsed ", filename, ": ", results)
