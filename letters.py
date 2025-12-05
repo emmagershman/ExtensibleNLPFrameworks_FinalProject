@@ -43,8 +43,11 @@ class Letters:
     @staticmethod
     def default_parser(filename):
         """ For processing plain text files (.txt) """
+        with open(filename, "r", encoding='utf-8') as f:
+            text = f.read()
+            text = text.lower()
         results = {
-            'wordcount': Counter("to be or not to be".split(" ")),
+            'wordcount': Counter(text.split(" ")),
             'numwords': rnd.randrange(10, 50)
         }
 
