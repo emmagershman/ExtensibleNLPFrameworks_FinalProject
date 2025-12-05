@@ -218,35 +218,30 @@ class Letters:
            - 'text':     the text content of the file
         """
 
-        files = misc_parameters.get("files", [])
-        num_files = len(files)
-
-        if num_files == 0:
-            print("No files provided to visualize.")
-            return
+        labels = list(self.data['numwords'].keys())
+        num_files = len(labels)
 
         # Determine grid size (square-ish)
         cols = math.ceil(math.sqrt(num_files))
         rows = math.ceil(num_files / cols)
 
-        fig, axes = plt.subplots(rows, cols, figsize=(5 * cols, 4 * rows))
-        axes = axes.flatten()  # Flatten for easier indexing
+        fig, axes = plt.subplots(rows, cols, figsize=(5 * cols, 4 * rows), sharey=True)
 
-        for i, file_data in enumerate(files):
-            filename = file_data["filename"]
-            text = file_data["text"]
+        if num_files == 1:
+            axes = [axes]
+        else:
+            axes = axes.flatten()
 
-            # Example metric → word count per file
-            words = text.split()
-            word_count = len(words)
+        for i, label in enumerate(labels):
+            word_count = self.data['numwords'][label]
 
             # Plot bar for each file
             axes[i].bar(["Word Count"], [word_count])
-            axes[i].set_title(filename)
+            axes[i].set_title(label)
             axes[i].set_ylabel("Count")
 
         # Hide unused subplots if any
-        for j in range(i + 1, len(axes)):
+        for j in range(num_files, len(axes)):
             axes[j].axis('off')
 
         plt.tight_layout()
@@ -275,8 +270,7 @@ class Letters:
             wc = WordCloud(
                 width=400,
                 height=400,
-                background_color='white',
-                font_path='C:/Windows/Fonts/arial.ttf'  # Specify Windows font
+                background_color='white'
             ).generate_from_frequencies(word_freq)
 
             axes[i].imshow(wc, interpolation='bilinear')
