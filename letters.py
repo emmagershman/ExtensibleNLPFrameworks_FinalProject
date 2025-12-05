@@ -29,8 +29,8 @@ URL3 = 'https://www.iwm.org.uk/history/letters-to-loved-ones'
 # self.data dictionary attribute and class TextFramework (Emma)
 """
 from collections import Counter, defaultdict
-import random as rnd
 import matplotlib.pyplot as plt
+import json
 
 class Letters:
 
@@ -48,11 +48,22 @@ class Letters:
             text = text.lower()
         results = {
             'wordcount': Counter(text.split(" ")),
-            'numwords': rnd.randrange(10, 50)
+            'numwords': len(text.split(" "))
         }
 
         print("Parsed ", filename, ": ", results)
         return results
+
+    @staticmethod
+    def json_parser(filename):
+        f = open(filename)
+        raw = json.load(f)
+        text = raw['text']
+        words = text.split(" ")
+        wc = Counter(words)
+        num = len(words)
+        f.close()
+        return {'wordcount': wc, 'numwords': num}
 
     def load_text(self, filename, label=None, parser=None):
         """ Register a text document with the framework.
