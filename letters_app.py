@@ -13,6 +13,7 @@ def main():
     letters.load_text('data/DearGertie_05-06-1916.txt', label='Dear Gertie, May 1916')
     pp.pprint(letters.data)
     letters.compare_num_words()
+    letters.second_visualization()
     letters.third_visualization()
 
 if __name__ == '__main__':
