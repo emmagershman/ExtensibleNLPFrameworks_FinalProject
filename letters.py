@@ -243,7 +243,7 @@ class Letters:
             # Plot bar for each file
             axes[i].bar(x_pos, values, width = 0.5, color = colors)
             axes[i].set_xticks(x_pos)
-            axes[i].set_xticklabels(['Total Words', 'Unique Words'], rotation = 15)
+            axes[i].set_xticklabels(['Total Words', 'Unique Words'])
             axes[i].set_title(label)
             axes[i].set_ylabel("Count")
 
