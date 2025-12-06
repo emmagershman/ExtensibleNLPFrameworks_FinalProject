@@ -255,7 +255,7 @@ class Letters:
         plt.tight_layout()
         plt.show()
 
-    def word_cloud(self, cols=3, **misc_parameters):
+    def word_cloud(self, cols=4, **misc_parameters):
         labels = list(self.data["wordcount"].keys())
         n = len(labels)
 
@@ -288,7 +288,8 @@ class Letters:
         for j in range(n, len(axes)):
             axes[j].axis('off')
 
-        plt.tight_layout()
+        plt.suptitle('Most Common Words in Letters to Loved Ones', fontsize=16)
+        plt.tight_layout(rect=[0, 0, 1, 0.96])
         plt.show()
 
     def Sentiment_curve(self, **misc_parameters):
