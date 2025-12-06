@@ -289,6 +289,7 @@ class Letters:
             axes[j].axis('off')
 
         plt.tight_layout()
+        #plt.title('Word Cloud For Each Letter')
         plt.show()
 
     def Sentiment_curve(self, **misc_parameters):
