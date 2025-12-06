@@ -210,7 +210,7 @@ class Letters:
 
 
 
-    def second_visualization(self, **misc_parameters): #change name later
+    def compare_words(self, **misc_parameters): #change name later
         """
         Creates a visualization array (subplot grid) with one subplot per text file.
         misc_parameters should contain a list of dictionaries with:

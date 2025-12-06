@@ -14,7 +14,7 @@ def main():
     pp.pprint(letters.data)
     letters.wordcount_sankey()
     letters.compare_num_words()
-    letters.second_visualization()
+    letters.compare_words()
     letters.word_cloud()
     letters.Sentiment_curve()
 
