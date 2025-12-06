@@ -288,8 +288,13 @@ class Letters:
         for j in range(n, len(axes)):
             axes[j].axis('off')
 
+<<<<<<< HEAD
         plt.suptitle('Most Common Words in Letters to Loved Ones', fontsize=16)
         plt.tight_layout(rect=[0, 0, 1, 0.96])
+=======
+        plt.tight_layout()
+        #plt.title('Word Cloud For Each Letter')
+>>>>>>> 64a55f80011d12dc16586ad9b0d8615bcfa812ff
         plt.show()
 
     def Sentiment_curve(self, **misc_parameters):
