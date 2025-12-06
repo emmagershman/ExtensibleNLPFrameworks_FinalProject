@@ -2,32 +2,6 @@ URL = 'https://newsinteractives.cbc.ca/longform/remember-that-i-love-you-a-soldi
 URL2 = 'https://blog.forceswarrecords.com/love-letter-from-a-world-war-one-soldier/'
 URL3 = 'https://www.iwm.org.uk/history/letters-to-loved-ones'
 
-"""
-# Create a framework class with, at minimum, the following methods:
-
-# load_stop_words(stopfile) - not as time-consuming (Lydia)
-# A list of common or stop words. These get filtered from each file automatically
-
-# load_text(self, filename, label=None, parser=None) - time-consuming, have to make sure its universal for any file (Emma)
-# Register a text file with the library. The label is an optional label you’ll use in your
-# visualizations to identify the text
-
-# wordcount_sankey(self, word_list=None, k=5) - time-consuming (Suraj)
-# Map each text to words using a Sankey diagram, where the thickness of the line
-# is the number of times that word occurs in the text. Users can specify a particular
-# set of words, or the words can be the union of the k most common words across
-# each text file (excluding stop words).
-
-# your_second_visualization(self, misc_parameters) - Use plotly/matplotlib for this, not too difficult (Chipego)
-# A visualization array of subplots with one subplot for each text file.
-# Rendering subplots is a good, advanced skill to know!
-
-# your_third_visualization(self, misc_parameters) - Use plotly/matplotlib, also not too difficult (Lydia)
-# A single visualization that overlays data from each of the text files. Make sure your
-# visualization distinguishes the data from each text file using labels or a legend
-
-# self.data dictionary attribute and class TextFramework (Emma)
-"""
 from collections import Counter, defaultdict
 import matplotlib.pyplot as plt
 import json
@@ -35,7 +9,6 @@ import string
 from textblob import TextBlob
 import plotly.graph_objects as go
 import pandas as pd
-import random
 import math
 from wordcloud import WordCloud
 
@@ -95,7 +68,8 @@ class Letters:
 
     def load_text(self, filename, label=None, parser=None):
         """ Register a text document with the framework.
-         Extract and store data to be used later in our visualizations. """
+         Extract and store data to be used later in our visualizations.
+         Done by Emma Gershman"""
         if parser is None:
             results = Letters.default_parser(filename)
         else:
@@ -134,6 +108,7 @@ class Letters:
     def wordcount_sankey(self, word_list=None, k=5):
         """
         Create a Sankey diagram mapping each loaded text (label) to words.
+        Function done by Suraj Swamy
         """
 
         # Make sure we have wordcount data
@@ -214,8 +189,7 @@ class Letters:
         """
         Creates a visualization array (subplot grid) with one subplot per text file.
         misc_parameters should contain a list of dictionaries with:
-           - 'filename': name of file
-           - 'text':     the text content of the file
+           - Function done by Chipego Nkolola
         """
 
         labels = list(self.data['numwords'].keys())
@@ -256,6 +230,8 @@ class Letters:
         plt.show()
 
     def word_cloud(self, cols=4, **misc_parameters):
+        """Creates a word cloud based off the word count
+        Done by Emma Gershman"""
         labels = list(self.data["wordcount"].keys())
         n = len(labels)
 
@@ -288,20 +264,16 @@ class Letters:
         for j in range(n, len(axes)):
             axes[j].axis('off')
 
-<<<<<<< HEAD
+
         plt.suptitle('Most Common Words in Letters to Loved Ones', fontsize=16)
         plt.tight_layout(rect=[0, 0, 1, 0.96])
-=======
-        plt.tight_layout()
-        #plt.title('Word Cloud For Each Letter')
->>>>>>> 64a55f80011d12dc16586ad9b0d8615bcfa812ff
         plt.show()
 
     def Sentiment_curve(self, **misc_parameters):
         """
         Create a single visualization that overlays data from each text file
         compare the polarities(positivity or negativity) of different text files from beigning to end
-        """
+        Done by Lydia """
         fig = go.Figure()
         labels = list(self.data["fulltext"].keys())
 
